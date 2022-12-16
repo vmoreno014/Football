@@ -2,6 +2,7 @@ var express = require('express');
 const mongojs = require("mongojs");
 var router = express.Router();
 var db = mongojs('clientesapp', ['users']);
+var ObjectId = mongojs.ObjectId;
 
 var users = [
     {id: 1, first_name: 'John', last_name: 'Doe', email: 'john.doe@ehu.eus'},
@@ -70,6 +71,16 @@ router.post('/add', function (req, res, next) {
     res.redirect('/users/show');
     console.log(newUser)
     */
+})
+
+router.delete('/delete:id', function (req, res, next) {
+    db.users.remove({_id: mongojs.ObjectId(req.params.id)}, function (err, result) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.redirect(303,'/users/show');
+        }
+    })
 })
 
 module.exports = router;
